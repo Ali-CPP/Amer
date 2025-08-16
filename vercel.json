@@ -3,22 +3,14 @@
   "name": "construction-safety-survey",
   "builds": [
     {
-      "src": "frontend/*.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "frontend/*.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "frontend/*.js",
+      "src": "public/**/*",
       "use": "@vercel/static"
     }
   ],
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/frontend/index.html"
+      "destination": "/index.html"
     }
   ],
   "headers": [
