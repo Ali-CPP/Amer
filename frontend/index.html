@@ -4,9 +4,596 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Construction Safety Survey</title>
-    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Styles */
+.header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.logo i {
+    font-size: 2rem;
+    color: #667eea;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.date-time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: #666;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+/* Screen Management */
+.screen {
+    display: none;
+    width: 100%;
+    max-width: 800px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Welcome Screen */
+.welcome-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.welcome-icon {
+    font-size: 4rem;
+    color: #667eea;
+    margin-bottom: 1.5rem;
+}
+
+.welcome-card h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.welcome-card p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.survey-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    color: #555;
+}
+
+.info-item i {
+    color: #667eea;
+    width: 20px;
+}
+
+/* Survey Screen */
+.survey-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.progress-bar {
+    background: #f0f0f0;
+    border-radius: 10px;
+    height: 8px;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill {
+    background: linear-gradient(90deg, #667eea, #764ba2);
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.3s ease;
+    width: 0%;
+}
+
+.progress-text {
+    position: absolute;
+    top: -30px;
+    right: 0;
+    font-size: 0.875rem;
+    color: #666;
+    font-weight: 500;
+}
+
+.question-container {
+    margin-bottom: 2rem;
+}
+
+.question-header h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2rem;
+    line-height: 1.4;
+}
+
+/* Answer Options */
+.answer-options {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.answer-btn {
+    flex: 1;
+    padding: 1.5rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.answer-btn:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+}
+
+.answer-btn.selected {
+    border-color: #667eea;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.answer-btn i {
+    font-size: 1.5rem;
+}
+
+/* Text Input */
+.text-input-container {
+    margin-bottom: 2rem;
+}
+
+#text-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+#text-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+#submit-text-btn {
+    margin-top: 1rem;
+}
+
+/* Navigation Buttons */
+.navigation-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+/* Review Screen */
+.review-container {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.review-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.review-header h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.review-header p {
+    color: #666;
+}
+
+.responses-list {
+    margin-bottom: 2rem;
+}
+
+.response-item {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid #667eea;
+}
+
+.response-question {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.response-answer {
+    color: #666;
+    font-style: italic;
+}
+
+.review-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Success Screen */
+.success-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.success-icon {
+    font-size: 4rem;
+    color: #28a745;
+    margin-bottom: 1.5rem;
+}
+
+.success-card h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.success-card p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.success-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    text-align: left;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    color: #555;
+}
+
+.detail-item i {
+    color: #667eea;
+    width: 20px;
+}
+
+.success-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Button Styles */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    font-family: inherit;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #5a6268;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+}
+
+.btn-outline {
+    background: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+}
+
+.btn-outline:hover:not(:disabled) {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Footer */
+.footer {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1rem 0;
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #666;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.footer-link {
+    color: #667eea;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: #764ba2;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.loading-spinner {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.loading-spinner i {
+    font-size: 2rem;
+    color: #667eea;
+    margin-bottom: 1rem;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .date-time {
+        align-items: center;
+    }
+
+    .main-content {
+        padding: 1rem;
+    }
+
+    .welcome-card,
+    .survey-container,
+    .review-container,
+    .success-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .answer-options {
+        flex-direction: column;
+    }
+
+    .navigation-buttons {
+        flex-direction: column;
+    }
+
+    .review-actions,
+    .success-actions {
+        flex-direction: column;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+
+    .welcome-card h2,
+    .success-card h2 {
+        font-size: 1.5rem;
+    }
+
+    .question-header h3 {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .welcome-card,
+    .survey-container,
+    .review-container,
+    .success-card {
+        padding: 1.5rem 1rem;
+    }
+
+    .welcome-icon,
+    .success-icon {
+        font-size: 3rem;
+    }
+
+    .btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+    </style>
 </head>
 <body>
     <div class="container">
@@ -188,6 +775,494 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+// Survey Application JavaScript
+class SafetySurveyApp {
+    constructor() {
+        this.currentQuestionIndex = 0;
+        this.responses = [];
+        this.surveyQuestions = [
+            {
+                question: "Have all workers completed their safety orientation for today?",
+                type: "yesno"
+            },
+            {
+                question: "Are all personal protective equipment (PPE) items in good condition and being worn properly?",
+                type: "yesno"
+            },
+            {
+                question: "Are all tools and equipment in safe working condition?",
+                type: "yesno"
+            },
+            {
+                question: "Are there any visible safety hazards on the construction site?",
+                type: "yesno"
+            },
+            {
+                question: "Describe any safety incidents or near-misses that occurred today:",
+                type: "text"
+            }
+        ];
+
+        this.initializeApp();
+    }
+
+    initializeApp() {
+        this.updateDateTime();
+        this.setupEventListeners();
+        this.startDateTimeUpdate();
+    }
+
+    updateDateTime() {
+        const now = new Date();
+        const dateElement = document.getElementById('current-date');
+        const timeElement = document.getElementById('current-time');
+        
+        if (dateElement) {
+            dateElement.textContent = now.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+        
+        if (timeElement) {
+            timeElement.textContent = now.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+        }
+    }
+
+    startDateTimeUpdate() {
+        setInterval(() => {
+            this.updateDateTime();
+        }, 1000);
+    }
+
+    setupEventListeners() {
+        // Welcome screen
+        document.getElementById('start-survey-btn')?.addEventListener('click', () => {
+            this.showScreen('survey-screen');
+            this.loadQuestion();
+        });
+
+        // Survey navigation
+        document.getElementById('prev-btn')?.addEventListener('click', () => {
+            this.previousQuestion();
+        });
+
+        document.getElementById('next-btn')?.addEventListener('click', () => {
+            this.nextQuestion();
+        });
+
+        // Answer buttons
+        document.querySelectorAll('.answer-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.selectAnswer(e.target.closest('.answer-btn').dataset.answer);
+            });
+        });
+
+        // Text input submission
+        document.getElementById('submit-text-btn')?.addEventListener('click', () => {
+            this.submitTextAnswer();
+        });
+
+        // Review screen
+        document.getElementById('edit-responses-btn')?.addEventListener('click', () => {
+            this.showScreen('survey-screen');
+            this.loadQuestion();
+        });
+
+        document.getElementById('submit-survey-btn')?.addEventListener('click', () => {
+            this.submitSurvey();
+        });
+
+        // Success screen
+        document.getElementById('new-survey-btn')?.addEventListener('click', () => {
+            this.resetSurvey();
+        });
+
+        document.getElementById('download-report-btn')?.addEventListener('click', () => {
+            this.downloadReport();
+        });
+
+        // Enter key for text input
+        document.getElementById('text-input')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.submitTextAnswer();
+            }
+        });
+    }
+
+    showScreen(screenId) {
+        // Hide all screens
+        document.querySelectorAll('.screen').forEach(screen => {
+            screen.classList.remove('active');
+        });
+
+        // Show target screen
+        document.getElementById(screenId)?.classList.add('active');
+    }
+
+    loadQuestion() {
+        const question = this.surveyQuestions[this.currentQuestionIndex];
+        const questionText = document.getElementById('question-text');
+        const yesNoAnswers = document.getElementById('yes-no-answers');
+        const textAnswer = document.getElementById('text-answer');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        if (questionText) {
+            questionText.textContent = question.question;
+        }
+
+        // Show/hide answer types
+        if (question.type === 'yesno') {
+            yesNoAnswers?.classList.remove('hidden');
+            textAnswer?.classList.add('hidden');
+        } else {
+            yesNoAnswers?.classList.add('hidden');
+            textAnswer?.classList.remove('hidden');
+            document.getElementById('text-input').value = '';
+        }
+
+        // Update progress
+        const progress = ((this.currentQuestionIndex + 1) / this.surveyQuestions.length) * 100;
+        if (progressFill) {
+            progressFill.style.width = `${progress}%`;
+        }
+        if (progressText) {
+            progressText.textContent = `Question ${this.currentQuestionIndex + 1} of ${this.surveyQuestions.length}`;
+        }
+
+        // Update navigation buttons
+        if (prevBtn) {
+            prevBtn.disabled = this.currentQuestionIndex === 0;
+        }
+        if (nextBtn) {
+            nextBtn.disabled = !this.responses[this.currentQuestionIndex];
+        }
+
+        // Highlight selected answer if exists
+        this.highlightSelectedAnswer();
+    }
+
+    selectAnswer(answer) {
+        // Remove previous selections
+        document.querySelectorAll('.answer-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+
+        // Select new answer
+        event.target.closest('.answer-btn').classList.add('selected');
+
+        // Store response
+        this.responses[this.currentQuestionIndex] = answer;
+
+        // Enable next button
+        document.getElementById('next-btn').disabled = false;
+    }
+
+    submitTextAnswer() {
+        const textInput = document.getElementById('text-input');
+        const answer = textInput.value.trim();
+
+        if (answer) {
+            this.responses[this.currentQuestionIndex] = answer;
+            document.getElementById('next-btn').disabled = false;
+            this.nextQuestion();
+        } else {
+            // Show error or highlight empty field
+            textInput.style.borderColor = '#dc3545';
+            setTimeout(() => {
+                textInput.style.borderColor = '#e0e0e0';
+            }, 2000);
+        }
+    }
+
+    highlightSelectedAnswer() {
+        const currentResponse = this.responses[this.currentQuestionIndex];
+        if (currentResponse) {
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                if (btn.dataset.answer === currentResponse) {
+                    btn.classList.add('selected');
+                }
+            });
+        }
+    }
+
+    previousQuestion() {
+        if (this.currentQuestionIndex > 0) {
+            this.currentQuestionIndex--;
+            this.loadQuestion();
+        }
+    }
+
+    nextQuestion() {
+        if (this.currentQuestionIndex < this.surveyQuestions.length - 1) {
+            this.currentQuestionIndex++;
+            this.loadQuestion();
+        } else {
+            this.showReviewScreen();
+        }
+    }
+
+    showReviewScreen() {
+        this.showScreen('review-screen');
+        this.populateReviewScreen();
+    }
+
+    populateReviewScreen() {
+        const responsesList = document.getElementById('responses-list');
+        if (!responsesList) return;
+
+        responsesList.innerHTML = '';
+
+        this.responses.forEach((response, index) => {
+            const question = this.surveyQuestions[index];
+            const responseItem = document.createElement('div');
+            responseItem.className = 'response-item';
+            responseItem.innerHTML = `
+                <div class="response-question">Q${index + 1}. ${question.question}</div>
+                <div class="response-answer">A: ${response}</div>
+            `;
+            responsesList.appendChild(responseItem);
+        });
+    }
+
+    async submitSurvey() {
+        this.showLoading(true);
+
+        try {
+            // Create survey data
+            const surveyData = {
+                title: "Daily Safety and Security Survey",
+                date: new Date().toISOString(),
+                responses: this.responses.map((response, index) => ({
+                    questionNumber: index + 1,
+                    question: this.surveyQuestions[index].question,
+                    answer: response
+                }))
+            };
+
+            // Generate report content
+            const reportContent = this.generateReportContent(surveyData);
+
+            // Create and download the report
+            const fileName = `Daily_Safety_and_Security_Survey_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.txt`;
+            this.downloadTextFile(reportContent, fileName);
+
+            // Show success screen
+            this.showSuccessScreen(fileName);
+
+        } catch (error) {
+            console.error('Error submitting survey:', error);
+            alert('There was an error submitting the survey. Please try again.');
+        } finally {
+            this.showLoading(false);
+        }
+    }
+
+    generateReportContent(surveyData) {
+        const now = new Date();
+        const lines = [
+            "=".padEnd(60, '='),
+            `           ${surveyData.title}`,
+            "=".padEnd(60, '='),
+            "",
+            `Survey Date: ${now.toLocaleDateString()}`,
+            `Survey Time: ${now.toLocaleTimeString()}`,
+            "",
+            "".padEnd(60, '-'),
+            ""
+        ];
+
+        surveyData.responses.forEach(response => {
+            lines.push(`Q${response.questionNumber}. ${response.question}`);
+            lines.push(`A: ${response.answer}`);
+            lines.push("");
+        });
+
+        lines.push("".padEnd(60, '-'));
+        lines.push(`Report generated on: ${now.toLocaleString()}`);
+        lines.push("=".padEnd(60, '='));
+
+        return lines.join('\n');
+    }
+
+    downloadTextFile(content, filename) {
+        const blob = new Blob([content], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    showSuccessScreen(fileName) {
+        this.showScreen('success-screen');
+        
+        // Update success screen details
+        const reportPath = document.getElementById('report-path');
+        const completionTime = document.getElementById('completion-time');
+        
+        if (reportPath) {
+            reportPath.textContent = fileName;
+        }
+        
+        if (completionTime) {
+            completionTime.textContent = new Date().toLocaleString();
+        }
+    }
+
+    resetSurvey() {
+        this.currentQuestionIndex = 0;
+        this.responses = [];
+        this.showScreen('welcome-screen');
+    }
+
+    downloadReport() {
+        // This would typically download the saved report
+        // For now, we'll regenerate and download
+        const surveyData = {
+            title: "Daily Safety and Security Survey",
+            date: new Date().toISOString(),
+            responses: this.responses.map((response, index) => ({
+                questionNumber: index + 1,
+                question: this.surveyQuestions[index].question,
+                answer: response
+            }))
+        };
+
+        const reportContent = this.generateReportContent(surveyData);
+        const fileName = `Daily_Safety_and_Security_Survey_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.txt`;
+        this.downloadTextFile(reportContent, fileName);
+    }
+
+    showLoading(show) {
+        const loadingOverlay = document.getElementById('loading-overlay');
+        if (loadingOverlay) {
+            if (show) {
+                loadingOverlay.classList.remove('hidden');
+            } else {
+                loadingOverlay.classList.add('hidden');
+            }
+        }
+    }
+
+    // Method to integrate with C# backend (if needed)
+    async sendToBackend(surveyData) {
+        try {
+            const response = await fetch('/api/survey', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(surveyData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to send survey data');
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('Error sending to backend:', error);
+            throw error;
+        }
+    }
+}
+
+// Initialize the application when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    new SafetySurveyApp();
+});
+
+// Add some utility functions for better UX
+function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    
+    // Add styles
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 1001;
+        animation: slideIn 0.3s ease-out;
+        max-width: 300px;
+    `;
+
+    // Set background color based on type
+    switch (type) {
+        case 'success':
+            notification.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+            break;
+        case 'error':
+            notification.style.background = 'linear-gradient(135deg, #dc3545, #c82333)';
+            break;
+        case 'warning':
+            notification.style.background = 'linear-gradient(135deg, #ffc107, #e0a800)';
+            break;
+        default:
+            notification.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+    }
+
+    // Add to page
+    document.body.appendChild(notification);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease-in';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Add CSS animations for notifications
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    
+    @keyframes slideOut {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(style);
+    </script>
 </body>
 </html>
