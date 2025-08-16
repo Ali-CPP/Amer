@@ -48,7 +48,14 @@ The GitHub Actions error was caused by missing Vercel authentication tokens. Thi
    ```
 
 #### Step 4: Enable Automated Deployment
-1. **Restore the original workflow** (if you want automated deployment)
+1. **Rename the workflow file:**
+   ```bash
+   # Rename the current workflow to disable it
+   mv .github/workflows/deploy.yml .github/workflows/deploy.yml.disabled
+   
+   # Enable the automated workflow
+   mv .github/workflows/deploy-automated.yml .github/workflows/deploy.yml
+   ```
 2. **Push to GitHub** - deployment will happen automatically
 
 ## 🔍 Troubleshooting Common Issues
