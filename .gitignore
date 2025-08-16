@@ -13,6 +13,16 @@ obj/
 *.swp
 *.swo
 
+# .NET build artifacts (should not be deployed)
+**/bin/
+**/obj/
+**/*.dll
+**/*.exe
+**/*.pdb
+**/*.user
+**/*.suo
+**/*.cache
+
 # Node.js
 node_modules/
 npm-debug.log*
