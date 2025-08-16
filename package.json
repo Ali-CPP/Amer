@@ -1,0 +1,22 @@
+{
+  "name": "construction-safety-survey-frontend",
+  "version": "1.0.0",
+  "description": "Modern web frontend for Construction Safety Survey application",
+  "main": "web-server.js",
+  "scripts": {
+    "start": "node web-server.js",
+    "dev": "node web-server.js"
+  },
+  "keywords": [
+    "safety",
+    "survey",
+    "construction",
+    "frontend",
+    "web"
+  ],
+  "author": "Construction Safety Survey Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
