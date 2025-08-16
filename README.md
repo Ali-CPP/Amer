@@ -168,21 +168,18 @@ construction-safety-survey/
 
 ## 🌐 Deployment
 
-### Vercel Deployment (Automatic)
+### Quick Deployment (Recommended)
 
-This repository is configured for automatic deployment on Vercel:
+1. **Push to GitHub**
+2. **Go to [vercel.com](https://vercel.com)**
+3. **Import your repository**
+4. **Deploy with default settings**
 
-1. **Fork this repository**
-2. **Connect to Vercel:**
-   - Go to [vercel.com](https://vercel.com)
-   - Sign up/Login with GitHub
-   - Click "New Project"
-   - Import your forked repository
-   - Deploy automatically
+### Detailed Deployment Guides
 
-3. **Custom Domain (Optional):**
-   - Add your custom domain in Vercel dashboard
-   - Configure DNS settings
+- **`VERCEL_SETUP.md`** - Complete Vercel deployment setup with troubleshooting
+- **`DEPLOYMENT_GUIDE.md`** - General deployment instructions
+- **`FRONTEND_GUIDE.md`** - Web frontend usage guide
 
 ### Manual Deployment
 
